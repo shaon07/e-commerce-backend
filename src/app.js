@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
+import { ddMiddleware } from "./middlewares/dd.middleware.js"
 
 export const app = express()
 
@@ -17,7 +18,10 @@ app.use(cookieParser())
 // Middleware to add dd function to response
 app.use(ddMiddleware)
 
+// Routes to serve
 import productRouter from "./routes/products.route.js"
-import { ddMiddleware } from "./middlewares/dd.middleware.js"
-app.use("/api/v1/products", productRouter)
+import categoryRouter from "./routes/categories.route.js"
+
+app.use("/api/v1/products", productRouter);
+app.use("/api/v1/categories", categoryRouter);
 

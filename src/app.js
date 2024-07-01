@@ -14,6 +14,10 @@ app.use(express.urlencoded({extended: true, limit: "16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
 
-app.get("/", (req, res) => {
-    res.send("<iframe src='https://www.youtube.com/embed/dQw4w9WgXcQ' />")
-})
+// Middleware to add dd function to response
+app.use(ddMiddleware)
+
+import productRouter from "./routes/products.route.js"
+import { ddMiddleware } from "./middlewares/dd.middleware.js"
+app.use("/api/v1/products", productRouter)
+

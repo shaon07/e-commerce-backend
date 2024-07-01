@@ -80,3 +80,13 @@ export const updateProduct = expressAsyncHandler(async (req, res) => {
 
   res.status(200).json(new ApiResponse(200, "success", newProduct));
 });
+
+export const deleteProduct = expressAsyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const product = await Products.findByIdAndDelete(id);
+
+  if(!product?._id){
+    return res.status(400).json(new ApiError(400, "product not deleted"));
+  }
+  res.status(200).json(new ApiResponse(200, "success", null));
+});

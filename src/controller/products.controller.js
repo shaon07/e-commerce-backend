@@ -4,7 +4,13 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 export const getProducts = expressAsyncHandler(async (req, res) => {
-  const products = await Products.find();
+  const sortBy = req.query.sort;
+  if (sortBy === "desc") {
+    const products = await Products.find().sort({ price: -1 });
+    res.status(200).json(new ApiResponse(200, "success", products));
+  } 
+
+  const products = await Products.find().sort({ price: 1 });
   res.status(200).json(new ApiResponse(200, "success", products));
 });
 

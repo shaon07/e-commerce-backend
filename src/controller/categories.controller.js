@@ -44,6 +44,15 @@ export const getCategory = expressAsyncHandler(async (req, res) => {
 export const updateCategory = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
+
+  if(!id){
+    return res.status(400).json(new ApiError(400, "id is required"));
+  }
+
+  if (!name) {
+    res.status(400).json(new ApiError(400, "name is required"));
+  }
+
   const category = await Category.findByIdAndUpdate(
     id,
     { name },

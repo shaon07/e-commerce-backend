@@ -12,7 +12,8 @@ const productSchema = new Schema(
       required: true,
     },
     category: {
-      type: "String",
+      type: Schema.Types.ObjectId,
+      ref: "Category",
       required: true,
     },
     description: {
@@ -23,8 +24,13 @@ const productSchema = new Schema(
       type: "String",
       required: true,
     },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-export const Products = mongoose.model("Product", productSchema)
+export const Products = mongoose.model("Product", productSchema);

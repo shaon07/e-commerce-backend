@@ -144,7 +144,7 @@ export const loginUser = expressAsyncHandler(async (req, res) => {
 
   const prevUser = await User.findOne({
     $or: [{ email }, { mobile }],
-  })
+  });
 
   if (!prevUser?._id) {
     return res.status(404).json(new ApiResponse(404, "user not found"));
@@ -160,8 +160,9 @@ export const loginUser = expressAsyncHandler(async (req, res) => {
     prevUser._id
   );
 
-
-  const userData = await User.findById(prevUser._id).select("-password -refreshToken");
+  const userData = await User.findById(prevUser._id).select(
+    "-password -refreshToken"
+  );
 
   const options = {
     httpOnly: true,
@@ -179,4 +180,29 @@ export const loginUser = expressAsyncHandler(async (req, res) => {
         refreshToken,
       })
     );
+});
+
+export const logOutUser = expressAsyncHandler(async (req, res) => {
+  await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      $unset: {
+        refreshToken: 1,
+      },
+    },
+    {
+      new: true,
+    }
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "User logged Out"));
 });
